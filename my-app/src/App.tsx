@@ -1,18 +1,23 @@
-import Cabecalho from './components/Cabecalho'
-import Conteudo from './components/Conteudo'
-import Rodape from './components/Rodape'
-
-import Home from './routes/Home';
-import Produtos from './routes/Produtos';
-import EditarProdutos from './routes/EditarProdutos';
-import Error from './routes/Error';
+import { Link, Outlet } from 'react-router';
+import ObservadorDeRota from './components/ObservadorDeRota';
 
 export default function App() {
   return (
-    <div>
-      <Cabecalho />
-      <Ou />
-      <Rodape />  
-    </div>
-  )
+    <>
+      <ObservadorDeRota />
+
+      <header>
+        <nav>
+          <Link to="/">Início</Link>
+          <Link to="/produtos">Produtos</Link>
+        </nav>
+      </header>
+
+      <Outlet />
+
+      <footer>
+        <p>© Sistema de Produtos</p>
+      </footer>
+    </>
+  );
 }
