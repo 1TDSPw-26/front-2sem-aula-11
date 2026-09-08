@@ -1,3 +1,283 @@
+# Instalação e Configuração de Rotas (`react-router`)
+
+Este guia orienta o passo a passo para configurar a navegação por páginas na sua aplicação.
+
+---
+
+### 1. Instalação do Pacote
+
+Instale o pacote responsável pelo gerenciamento de caminhos da aplicação:
+
+```bash
+npm i react-router
+```
+
+> **Nota explicativa:** 
+> O comando `i` é apenas um apelido curto para `install`. Ambos executam a mesma função no terminal. Pense no `react-router` como o mapa e as placas de sinalização do seu projeto: ele quem ensina a aplicação a trocar de tela sem precisar recarregar a página inteira.
+
+---
+
+### 2. Criação da Estrutura de Pastas
+
+Dentro do diretório `/src`, crie uma pasta chamada `/routes`:
+
+```text
+src/
+└── routes/
+```
+
+> **Nota explicativa:**
+> A pasta `/routes` organiza as diferentes telas do sistema. Em outros frameworks (como Next.js), essa pasta costuma ser chamada de `/pages` ou `/app`. O objetivo é o mesmo: guardar cada página acessível.
+
+---
+
+### 3. Criação dos Componentes de Rota
+
+Dentro de `/routes`, adicione as páginas seguindo a convenção:
+
+* **a)** O nome da subpasta representa o recurso (ex: `/Produto`).
+* **b)** O arquivo do componente sempre se chama `index.tsx`.
+* **c)** O nome da função interna corresponde ao nome da pasta (ex: `export default function Produto() { ... }`).
+* **d)** Crie as seguintes rotas:
+  * `Home`
+  * `Produtos`
+  * `EditarProdutos`
+  * `Error`
+
+> **Nota explicativa:**
+> Usar o arquivo `index.tsx` dentro de uma pasta com o nome da tela ajuda a manter o código arrumado, como gavetas etiquetadas. Quem olha de fora sabe exatamente o que está guardado ali.
+
+---
+
+### 4. Importação das Telas no `main.tsx`
+
+Importe cada um dos componentes criados diretamente no arquivo de entrada `main.tsx`:
+
+```tsx
+import Home from './routes/Home';
+import Produtos from './routes/Produtos';
+import EditarProdutos from './routes/EditarProdutos';
+import Error from './routes/Error';
+```
+
+---
+
+### 5. Importação dos Recursos de Roteamento
+
+Ainda no `main.tsx`, importe as ferramentas do `react-router`:
+
+```tsx
+import { createBrowserRouter, RouterProvider } from 'react-router';
+```
+
+> **Nota explicativa:**
+> * `createBrowserRouter`: É o "cérebro" que memoriza a lista de todos os caminhos disponíveis.
+> * `RouterProvider`: É a "tomada" que liga esse cérebro ao restante do visual da aplicação.
+
+---
+
+### 6. Criação da Lista de Rotas
+
+Declare a constante `router` utilizando a função `createBrowserRouter`:
+
+```tsx
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <Error />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/produtos", element: <Produtos /> },
+      { path: "/editar-produtos", element: <EditarProdutos /> }
+    ]
+  }
+]);
+```
+
+> **Nota explicativa:**
+> * `path`: O endereço digitado na barra do navegador (ex: `/produtos`).
+> * `element`: A tela que deve ser desenhada quando esse endereço for chamado.
+> * `errorElement`: A tela de socorro exibida caso o usuário tente entrar em um caminho inexistente.
+> * `children`: As rotas filhas que serão exibidas no espaço interno da tela principal (`App`).
+
+---
+
+### 7. Atualização do Ponto de Entrada (`root`)
+
+Substitua a chamada direta de `<App />` pelo componente provedor com o roteador configurado:
+
+```tsx
+// Antes:
+// <StrictMode>
+//   <App />
+// </StrictMode>
+
+// Depois:
+<StrictMode>
+  <RouterProvider router={router} />
+</StrictMode>
+```
+
+---
+
+### 8. Configuração do Ponto de Troca (`Outlet`)
+
+No arquivo `App.tsx`, substitua o `<Conteudo />` pelo `<Outlet />`:
+
+```tsx
+import { Outlet } from 'react-router';
+import Cabecalho from './components/Cabecalho';
+import Rodape from './components/Rodape';
+
+export default function App() {
+  return (
+    <>
+      <Cabecalho />
+      <Outlet />
+      <Rodape />
+    </>
+  );
+}
+```
+
+> **Nota explicativa:**
+> O `<Outlet />` funciona como uma moldura de quadro mágica: a moldura (cabeçalho e rodapé) fica sempre parada no mesmo lugar, e apenas a pintura do centro muda quando você clica em outra rota.
+
+---
+
+### 9. Validação no Navegador
+
+Inicie a aplicação e teste o acesso manual digitando as rotas na barra de endereços:
+
+* `http://localhost:5173/` (Carrega a `Home`)
+* `http://localhost:5173/produtos` (Carrega `Produtos`)
+* `http://localhost:5173/editar-produtos` (Carrega `EditarProdutos`)
+
+> **Comportamento esperado:** Cabeçalho e rodapé permanecem fixos; somente o centro (onde fica o `Outlet`) alterna seu conteúdo.
+
+---
+
+### 10. Criação do Componente de Navegação (`Menu`)
+
+Crie um componente funcional `<Menu />` e posicione-o dentro do `<Cabecalho />`:
+
+```tsx
+import { Link } from 'react-router';
+
+export default function Menu() {
+  return (
+    <nav>
+      <Link to="/">Início</Link>
+      <Link to="/produtos">Produtos</Link>
+      <Link to="/editar-produtos">Editar Produtos</Link>
+    </nav>
+  );
+}
+```
+
+> **Nota explicativa:**
+> Usamos `<Link to="...">` em vez da tag tradicional `<a href="...">`. O `<Link>` faz a troca de tela instantânea sem recarregar a página do zero, mantendo a navegação rápida e suave.
+---
+
+# useEffect: O hook que controla a rerenderização!!
+
+Neste guia, vamos aprender como reagir a mudanças no seu projeto utilizando ganchos (**Hooks**):
+
+* **O que é o `useEffect`?**  
+  O `useEffect` é um hook nativo do React que atua como um observador. Ele serve para disparar ações secundárias (efeitos colaterais) sempre que algo muda ou quando um componente precisa se re-renderizar, sem interferir diretamente no fluxo visual da tela.
+
+* **O que é o `useLocation`?**  
+  O `useLocation` também é um hook, mas fornecido pelo `react-router`. Ele atua como uma antena que lê em tempo real os dados da URL atual da aplicação (caminho, parâmetros e estado).
+
+Ao juntar os dois, criamos uma rotina automática que reage toda vez que o usuário navega por uma rota.
+
+---
+
+### Passo 1: Criar o Componente Observador de Rota
+
+Crie o arquivo `src/components/ObservadorDeRota.tsx`:
+
+```tsx
+import { useEffect } from 'react';
+import { useLocation } from 'react-router';
+
+export default function ObservadorDeRota() {
+  const location = useLocation();
+
+  useEffect(() => {
+    // 1. Exibe a rota acessada no console
+    console.log(`Rota acessada: ${location.pathname}`);
+
+    // 2. Altera o título da aba do navegador
+    document.title = `Aplicação | ${location.pathname}`;
+
+    // 3. Rola a visualização de volta ao topo
+    window.scrollTo(0, 0);
+
+  }, [location]); // Dependência que dispara o hook
+
+  return null;
+}
+```
+
+> **Explicação do Passo 1:**
+> * `useLocation()`: Ativa a leitura do endereço da aplicação e guarda em `location`.
+> * `useEffect(..., [location])`: O hook fica vigiando o valor de `location`. Se ele mudar, o código dentro da função roda imediatamente.
+> * `return null`: O componente executa apenas tarefas de lógica e não adiciona elementos visuais ao HTML.
+
+---
+
+### Passo 2: Importar e Adicionar no `App.tsx`
+
+Abra o arquivo `src/App.tsx` e coloque o observador no topo da estrutura:
+
+```tsx
+import { Outlet } from 'react-router';
+import Cabecalho from './components/Cabecalho';
+import Rodape from './components/Rodape';
+import ObservadorDeRota from './components/ObservadorDeRota';
+
+export default function App() {
+  return (
+    <>
+      <ObservadorDeRota />
+      <Cabecalho />
+      <Outlet />
+      <Rodape />
+    </>
+  );
+}
+```
+
+> **Explicação do Passo 2:**
+> * Colocar o `<ObservadorDeRota />` dentro de `App.tsx` garante que o monitoramento fique ativo em toda a aplicação.
+> * O `<Outlet />` continua cuidando da troca das páginas filhas enquanto o observador atua em segundo plano.
+
+---
+
+### Passo 3: Por que o Observador Funciona se o `App` não Muda?
+
+> **Explicação do Passo 3:**
+> 1. O `<RouterProvider>` compartilha o estado da rota com toda a árvore via Context API do React.
+> 2. O hook `useLocation` conecta o `ObservadorDeRota` diretamente a esse canal.
+> 3. Quando a rota muda, o React não precisa recarregar o `<App />` inteiro: ele atualiza apenas os componentes que usam hooks inscritos nessa alteração, re-executando o `useEffect`.
+
+---
+
+### Passo 4: Testar no Navegador
+
+Execute `npm run dev` e valide o fluxo:
+
+1. Abra o navegador e o console (`F12`).
+2. Clique nos links do menu para alternar entre as rotas.
+3. Verifique o console exibindo o novo caminho e a aba do navegador alterando o texto.
+
+> **Explicação do Passo 4:**
+> Esse teste confirma que o hook `useEffect` identificou a alteração disparada pelo `useLocation` e concluiu as ações com sucesso.
+
+---
+
 # Aula — 2 de setembro de 2026
 
 ## Inicialização de um projeto do zero
