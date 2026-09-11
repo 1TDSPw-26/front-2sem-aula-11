@@ -1,28 +1,39 @@
-import imgQuadrado from '../../img/quadrado.png';
+// import imgQuadrado from "../../img/quadrado.png";
+import Imagens from "../Imagens";
 
-export default function Conteudo(){
-    return(
-        <main>
-            <section>
-                <h2>Conteúdo</h2>
+export default function Conteudo() {
+  return (
+    <main>
+      <section>
+        <h2>Conteúdo</h2>
 
-                <figure>
-                    <img src="https://placehold.co/600x400/0000FF/FF0000/png" alt="Figura de demonstração." />
-                    <figcaption>Imagem externa</figcaption>
-                </figure>
+            <Imagens/>
 
-                <figure>
-                    <img src={imgQuadrado} alt="Figura de demonstração." />
-                    <figcaption>Imagem interna</figcaption>
-                </figure>
+        {/* <figure>
+          <img
+            src="https://placehold.co/300x200/0000FF/FFFFFF/png"
+            alt="Figure de demonstração"
+          />
+          <figcaption>Imagem Externa</figcaption>
+        </figure>
+        
+        <figure>
+          <img src={imgQuadrado} alt="Figure de demonstração" />
+            <figcaption>Imagem Interna</figcaption>
+        </figure>
 
-                <figure>
-                    <img src="/quadrado-b.png" alt="Figura de demonstração." />
-                    <figcaption>Imagem interna</figcaption>
-                </figure>
+        <figure>
+          <img src="/image/quadrado-b.png" alt="Figure de demonstração" />
+            <figcaption>Imagem Estática</figcaption>
+        </figure> */}
 
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ad inventore laboriosam iste dolore molestias voluptas aut voluptatibus iusto facilis iure quo mollitia quam cum eligendi dolor ut corrupti excepturi, voluptatum magnam incidunt doloribus accusantium quae magni nobis. Voluptatem mollitia recusandae, tenetur exercitationem laboriosam labore? Mollitia maiores totam distinctio ipsam quasi?</p>
-            </section>
-        </main>
-    )
+
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat
+          dolorem numquam ratione atque! Perspiciatis assumenda magnam neque
+          omnis porro non sequi unde! Eius nihil error delectus et earum id quo.
+        </p>
+      </section>
+    </main>
+  );
 }
