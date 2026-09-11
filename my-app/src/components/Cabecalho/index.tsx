@@ -1,8 +1,10 @@
+import Menu from "../Menu";
+
 export default function Cabecalho() {
     return (
         <header>
-            <h1>Cabeçalho</h1>
-            <hr />
+            <h1>Meu Projeto</h1>
+            <Menu/>
         </header>
-    )
-}
+    );
+}   
