@@ -1,5 +1,5 @@
 // import imgQuadrado from "../../img/quadrado.png";
-import Imagens from "../Imagens/imagens";
+import Imagens from "../Imagens";
 
 export default function Conteudo() {
   return (
